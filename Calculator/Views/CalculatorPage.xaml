@@ -2,23 +2,20 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Calculator.Views.CalculatorPage"
-             Title="CalculatorPage">
+             Title="Calculator">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="10, 5, 20, 5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="2*" />
-            </Grid.RowDefinitions>
-            <Label Text="" Grid.Row="0" HorizontalTextAlignment="End" VerticalTextAlignment="Center" FontSize="Medium" x:Name="UpperDisplay"/>
-            <Label Text="" Grid.Row="1" HorizontalTextAlignment="End" VerticalTextAlignment="Center" FontSize="Large" x:Name="MainDisplay"/>
-        </Grid>
+        <HorizontalStackLayout HorizontalOptions="End" Grid.Row="0" Margin="10, 5, 20, 5">
+            <Label Text="" HorizontalTextAlignment="End" VerticalTextAlignment="Center" FontSize="Large" x:Name="UpperDisplay" HorizontalOptions="End" Margin="0, 0, 5, 0" Style="{StaticResource LabelStyle}"/>
+            <Label Text="" HorizontalTextAlignment="End" VerticalTextAlignment="Center" FontSize="Large" x:Name="MainDisplay" HorizontalOptions="End"  Style="{StaticResource LabelStyle}"/>
+        </HorizontalStackLayout>
         <Border StrokeShape="RoundRectangle 20, 20, 0, 0" Grid.Row="1" Stroke="{StaticResource Primary1}">
             <Grid Style="{StaticResource ButtonsBackground}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -32,30 +29,34 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Text="7" Clicked="NumberClick" Grid.Row="1" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
-                <Button Text="8" Clicked="NumberClick" Grid.Row="1" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
-                <Button Text="9" Clicked="NumberClick" Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
-                <Button Text="4" Clicked="NumberClick" Grid.Row="2" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
-                <Button Text="5" Clicked="NumberClick" Grid.Row="2" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
-                <Button Text="6" Clicked="NumberClick" Grid.Row="2" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
-                <Button Text="1" Clicked="NumberClick" Grid.Row="3" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
-                <Button Text="2" Clicked="NumberClick" Grid.Row="3" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
-                <Button Text="3" Clicked="NumberClick" Grid.Row="3" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
-                <Button Text="0" Clicked="NumberClick" Grid.Row="4" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
-                <Button Text="+/-" Clicked="SyntaxClick" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" BindingContext="+-" Style="{StaticResource ButtonStyle}" TextColor="{StaticResource Accent2}"/>
-                <Button Text="." Clicked="SyntaxClick" Grid.Row="4" Grid.Column="2" BindingContext="." Style="{StaticResource ButtonStyle}" />
-                <Button Text="/" Clicked="OperationClick" Grid.Row="2" Grid.Column="4" BindingContext="Divide" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="x" Clicked="OperationClick" Grid.Row="2" Grid.Column="3" BindingContext="Multiply" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="-" Clicked="OperationClick" Grid.Row="3" Grid.Column="4" BindingContext="Subtract" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="+" Clicked="OperationClick" Grid.Row="3" Grid.Column="3" BindingContext="Add" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="(" Clicked="OperationClick" Grid.Row="1" Grid.Column="3" BindingContext="OpeningBracket" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text=")" Clicked="OperationClick" Grid.Row="1" Grid.Column="4" BindingContext="ClosingBracket" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="=" Clicked="OperationClick" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" BindingContext="Equals" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="back" Clicked="SyntaxClick" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" BindingContext="Back" Style="{StaticResource OperationButtonStyle}" />
-                <Button Text="C" Clicked="SyntaxClick" Grid.Row="0" Grid.Column="0" BindingContext="Clear" Style="{StaticResource ButtonStyle}" TextColor="{StaticResource Accent2}"/>
-                <Button Text="" Grid.Row="4" Grid.Column="0" BindingContext="ClearEntry" Style="{StaticResource ButtonStyle}" />
+                <Button Text="7" Clicked="NumberClick" Grid.Row="2" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
+                <Button Text="8" Clicked="NumberClick" Grid.Row="2" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                <Button Text="9" Clicked="NumberClick" Grid.Row="2" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
+                <Button Text="4" Clicked="NumberClick" Grid.Row="3" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
+                <Button Text="5" Clicked="NumberClick" Grid.Row="3" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                <Button Text="6" Clicked="NumberClick" Grid.Row="3" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
+                <Button Text="1" Clicked="NumberClick" Grid.Row="4" Grid.Column="0" Style="{StaticResource ButtonStyle}" />
+                <Button Text="2" Clicked="NumberClick" Grid.Row="4" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                <Button Text="3" Clicked="NumberClick" Grid.Row="4" Grid.Column="2" Style="{StaticResource ButtonStyle}" />
+                <Button Text="0" Clicked="NumberClick" Grid.Row="5" Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                <Button Text="+/-" Clicked="SyntaxClick" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BindingContext="+-" Style="{StaticResource ButtonStyle}" TextColor="{StaticResource Accent2}"/>
+                <Button Text="." Clicked="SyntaxClick" Grid.Row="5" Grid.Column="2" BindingContext="." Style="{StaticResource ButtonStyle}" />
+                <Button Text="÷" Clicked="OperationClick" Grid.Row="3" Grid.Column="4" BindingContext="Divide" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="x" Clicked="OperationClick" Grid.Row="3" Grid.Column="3" BindingContext="Multiply" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="-" Clicked="OperationClick" Grid.Row="4" Grid.Column="4" BindingContext="Subtract" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="%" Clicked="OperationClick" Grid.Row="1" Grid.Column="2" BindingContext="Modulo" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="√" Clicked="OperationClick" Grid.Row="1" Grid.Column="3" BindingContext="Root" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="^" Clicked="OperationClick" Grid.Row="1" Grid.Column="4" BindingContext="Power" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="+" Clicked="OperationClick" Grid.Row="4" Grid.Column="3" BindingContext="Add" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="(" Clicked="OperationClick" Grid.Row="2" Grid.Column="3" BindingContext="OpeningBracket" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text=")" Clicked="OperationClick" Grid.Row="2" Grid.Column="4" BindingContext="ClosingBracket" Style="{StaticResource OperationButtonStyle}" />
+                <Button Text="=" Clicked="OperationClick" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" BindingContext="Equals" Style="{StaticResource OperationButtonStyle}" TextColor="{StaticResource Accent2}"/>
+                <Button Text="Back" Clicked="SyntaxClick" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" BindingContext="Back" Style="{StaticResource OperationButtonStyle}" TextColor="{StaticResource Accent2}"/>
+                <Button Text="Clear" Clicked="SyntaxClick" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" BindingContext="Clear" Style="{StaticResource ButtonStyle}" TextColor="{StaticResource Accent2}"/>
+                <Button Text="" Grid.Row="5" Grid.Column="0" BindingContext="ClearEntry" Style="{StaticResource ButtonStyle}" />
             </Grid>
         </Border>
+        <Entry x:Name="Entry" HeightRequest="0" WidthRequest="0" IsEnabled="True" TextChanged="KeyPressed" Completed="KeyFinish"/>
     </Grid>
     <ContentPage.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
@@ -77,6 +78,10 @@
         <Style x:Key="ButtonsBackground" TargetType="Grid">
             <Setter Property="BackgroundColor" Value="{StaticResource Primary2}" />
             <Setter Property="Padding" Value="9, 20, 9, 9" />
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="IBMPlex" />
+            <Setter Property="LineBreakMode" Value="NoWrap"/>
         </Style>
     </ContentPage.Resources>
 </ContentPage>

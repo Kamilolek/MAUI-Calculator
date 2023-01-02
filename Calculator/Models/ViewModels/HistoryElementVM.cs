@@ -11,6 +11,6 @@ namespace Calculator.Models.ViewModels
     {
         public string Equation { get; set; }
         public string Result { get; set; }
-        public Equation EquationObject { get; set; }
+        public int Id { get; set; }
     }
 }

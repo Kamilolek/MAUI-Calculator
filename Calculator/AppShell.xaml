@@ -9,11 +9,18 @@
     <TabBar>
         <ShellContent
             Title="Calculator"
+            Icon="calculator.png"
             ContentTemplate="{DataTemplate local:CalculatorPage}"
-            Route="CalculatorPage" />
+            Route="Calculator" />
         <ShellContent
             Title="History"
+            Icon="history.png"
             ContentTemplate="{DataTemplate local:HistoryPage}"
-            Route="HistoryPage" />
+            Route="HistorPage" />
+        <ShellContent
+            Title="About"
+            Icon="question.png"
+            ContentTemplate="{DataTemplate local:AboutPage}"
+            Route="AboutPage"/>
     </TabBar>
 </Shell>

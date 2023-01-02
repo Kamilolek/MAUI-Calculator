@@ -12,7 +12,5 @@ namespace Calculator.Models.DataModels
         public string MainDisplay { get; set; }
         public float Result { get; set; }
         public List<EquationElement> EquationElements { get; set; } = new();
-        public bool IsResult { get; set; }
-        public List<float> Numbers { get; set; } = new();
     }
 }

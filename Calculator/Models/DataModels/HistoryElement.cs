@@ -10,5 +10,6 @@ namespace Calculator.Models.DataModels
     {
         public Equation Equation { get; set; }
         public DateTime Date { get; set; }
+        public string FileName { get; set; }
     }
 }

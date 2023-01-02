@@ -10,17 +10,25 @@ namespace Calculator.Controllers
 {
     public class EquationController : IEquationController
     {
-        private Equation _equation = new();
+        private Equation _equation;
         private readonly IHistoryController _historyController;
         private float _lastResult;
         public EquationController(HistoryController historyController)
         {
             _historyController = historyController;
+            _equation = new()
+            {
+                UpperDisplay = "",
+                MainDisplay = ""
+            };
         }
-
-
         public void ChangeMark()
         {
+            if(_equation.MainDisplay == null)
+            {
+                _equation.MainDisplay = "-";
+                return;
+            }
             if (_equation.MainDisplay.StartsWith("-"))
             {
                 _equation.MainDisplay = _equation.MainDisplay.Substring(1);
@@ -53,22 +61,42 @@ namespace Calculator.Controllers
             {
                 if (_equation.EquationElements.Count == 0)
                 {
-                    Debug.WriteLine(_equation.EquationElements.Count);
-                    _equation.EquationElements.Add(new EquationElement
+                    if(operation.Name == "Root")
                     {
-                        DataType = OperationDataType.Number,
-                        Number = _lastResult
-                    });
+                        _equation.EquationElements.Add(new EquationElement
+                        {
+                            DataType = OperationDataType.Number,
+                            Number = 2
+                        });
+                    }
+                    else
+                    {
+                        _equation.EquationElements.Add(new EquationElement
+                        {
+                            DataType = OperationDataType.Number,
+                            Number = _lastResult
+                        });
+                    }
                 }
-                Debug.WriteLine(_equation.EquationElements.Count);
             }
             _equation.MainDisplay = "";
             if (isResult)
             {
-                _equation.UpperDisplay = GenerateUpperDisplay() + "=";
+                _equation.UpperDisplay = GenerateUpperDisplay() + "= ";
             }
             else
             {
+
+                if (_equation.EquationElements.Last().DataType == OperationDataType.Number && operation.Name == "OpeningBracket")
+                {
+                    _equation.EquationElements.Add(new EquationElement
+                    {
+                        DataType = OperationDataType.Operation,
+                        Operation = Operators.GetOperator("Multiply")
+                    });
+                }
+
+
                 _equation.EquationElements.Add(new EquationElement
                 {
                     DataType = OperationDataType.Operation,
@@ -115,67 +143,108 @@ namespace Calculator.Controllers
 
         private List<EquationElement> ConvertToReversedPolishNotation()
         {
-            List<EquationElement> output = new();
-            Stack<EquationElement> stack = new();
-            foreach (EquationElement element in _equation.EquationElements)
+            try
             {
-                if (element.DataType == OperationDataType.Number)
+                List<EquationElement> output = new();
+                Stack<EquationElement> stack = new();
+                foreach (EquationElement element in _equation.EquationElements)
                 {
-                    output.Add(element);
-                }
-                else
-                {
-                    if (element.Operation.Name == "OpeningBracket")
+                    if (element.DataType == OperationDataType.Number)
                     {
-                        stack.Push(element);
-                    }
-                    else if (element.Operation.Name == "ClosingBracket")
-                    {
-                        while (stack.Peek().Operation.Name != "OpeningBracket")
-                        {
-                            output.Add(stack.Pop());
-                        }
-                        stack.Pop();
+                        output.Add(element);
                     }
                     else
                     {
-                        while (stack.Count > 0 && stack.Peek().Operation.Priority >= element.Operation.Priority)
+                        if (element.Operation.Name == "OpeningBracket")
                         {
-                            output.Add(stack.Pop());
+                            stack.Push(element);
                         }
-                        stack.Push(element);
+                        else if (element.Operation.Name == "ClosingBracket")
+                        {
+                            while (stack.Peek().Operation.Name != "OpeningBracket")
+                            {
+                                output.Add(stack.Pop());
+                            }
+                            stack.Pop();
+                        }
+                        else
+                        {
+                            while (stack.Count > 0 && stack.Peek().Operation.Priority >= element.Operation.Priority)
+                            {
+                                output.Add(stack.Pop());
+                            }
+                            stack.Push(element);
+                        }
                     }
                 }
+                while (stack.Count > 0)
+                {
+                    output.Add(stack.Pop());
+                }
+                return output;
             }
-            while (stack.Count > 0)
+            catch (Exception e)
             {
-                output.Add(stack.Pop());
+                if (e.Message == "Stack empty.")
+                {
+                    _equation.UpperDisplay = "";
+                    _equation.MainDisplay = "Syntax Error";
+                }
+                else
+                {
+                    _equation.UpperDisplay = "";
+                    _equation.MainDisplay = "Error";
+                }
+                return new List<EquationElement>();
             }
-            return output;
-        }
+        }    
 
         private void CalculateWithReversedPolishNotation(List<EquationElement> equationElements)
         {
             Stack<float> stack = new();
-            for (int i = 0; i < equationElements.Count; i++)
+            try
             {
-                if (equationElements[i].DataType == OperationDataType.Number)
+                for (int i = 0; i < equationElements.Count; i++)
                 {
-                    stack.Push(equationElements[i].Number);
+                    if (equationElements[i].DataType == OperationDataType.Number)
+                    {
+                        stack.Push(equationElements[i].Number);
+                    }
+                    else
+                    {
+                        float number2 = stack.Pop();
+                        float number1 = stack.Pop();
+                        if (number2 == 0 && equationElements[i].Operation.Name == "Divide")
+                        {
+                            _equation.UpperDisplay = "";
+                            _equation.MainDisplay = "Undefined";
+                            return;
+                        }
+                        Debug.WriteLine(number1 + " " + number2 + equationElements[i].Operation.Name);
+                        float result = Calculate(number1, number2, equationElements[i].Operation);
+                        stack.Push(result);
+                    }
+
+                }
+                _equation.Result = stack.Pop();
+                _equation.MainDisplay = _equation.Result.ToString();
+                _historyController.AddToHistory(_equation);
+                _lastResult = _equation.Result;
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Stack empty.")
+                {
+                    _equation.UpperDisplay = "";
+                    _equation.MainDisplay = "Syntax Error";
                 }
                 else
                 {
-                    float number2 = stack.Pop();
-                    float number1 = stack.Pop();
-                    float result = Calculate(number1, number2, equationElements[i].Operation);
-                    stack.Push(result);
+                    _equation.UpperDisplay = "";
+                    _equation.MainDisplay = "Error";
                 }
+                return;
             }
-            _equation.Result = stack.Pop();
-            Debug.WriteLine(_equation.Result);
-            _equation.MainDisplay = _equation.Result.ToString();
-            _historyController.AddToHistory(_equation);
-            _lastResult = _equation.Result;
         }
 
         private float Calculate(float number1, float number2, Operator operation)
@@ -192,6 +261,10 @@ namespace Calculator.Controllers
                     return number1 / number2;
                 case "Power":
                     return (float)Math.Pow(number1, number2);
+                case "Root":
+                    return (float)Math.Pow(number2, 1 / number1);
+                case "Modulo":
+                    return number1 % number2;
                 default:
                     return 0;
             }
@@ -199,20 +272,30 @@ namespace Calculator.Controllers
 
         public void Clear()
         {
-            _equation = new Equation();
-            _equation.MainDisplay = "";
-            _equation.UpperDisplay = "";
+            _equation = new Equation
+            {
+                MainDisplay = "",
+                UpperDisplay = ""
+            };
         }
 
         public void Backspace()
         {
-            if (_equation.MainDisplay.Length > 1)
+            if (_equation.MainDisplay.Length >= 1)
             {
                 _equation.MainDisplay = _equation.MainDisplay.Substring(0, _equation.MainDisplay.Length - 1);
             }
             else
             {
-                _equation.MainDisplay = "0";
+                if (_equation.EquationElements.Count <= 1)
+                {
+                    Clear();
+                }
+                else
+                {
+                    _equation.EquationElements.RemoveAt(_equation.EquationElements.Count - 1);
+                }
+                _equation.UpperDisplay = GenerateUpperDisplay();
             }
         }
 

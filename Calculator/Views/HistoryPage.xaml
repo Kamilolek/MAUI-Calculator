@@ -2,25 +2,58 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Calculator.Views.HistoryPage"
-             Title="HistoryPage">
-    <VerticalStackLayout>
-        <ListView x:Name="HistoryList">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="2*"/>
-                            </Grid.RowDefinitions>
-                            <Label Text="{Binding Equation}"
-                                   Grid.Row="0"/>
-                            <Label Text="{Binding Result}"
-                                   Grid.Row="1" />
+             Title="History">
+    <ListView x:Name="HistoryList">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Equation}" FontSize="18"  VerticalTextAlignment="Center" Margin="10, 5, 5, 5" Grid.Column="0" Style="{StaticResource LabelStyle}"/>
+                            <Label Text="{Binding Result}" FontSize="22" TextColor="{StaticResource Accent1}" VerticalTextAlignment="Center" Grid.Column="1" Style="{StaticResource LabelStyle}" />
                         </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Text="Delete" Clicked="DeleteEquation" Margin="5, 5, 10, 5" Grid.Column="0" Style="{StaticResource OperationButtonStyle}" BindingContext="{Binding Id}"/>
+                            <Button Text="Copy" Clicked="CopyEquation" Margin="5, 5, 10, 5" Grid.Column="1" Style="{StaticResource ButtonStyle}" BindingContext="{Binding Id}"/>
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    <ContentPage.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="IBMPlexMonoRegular" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="{StaticResource Shadow2}" />
+            <Setter Property="BackgroundColor" Value="{StaticResource Primary3}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="5, 0, 5, 0"/>
+        </Style>
+        <Style x:Key="OperationButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="IBMPlexMonoRegular" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="{StaticResource Accent1}" />
+            <Setter Property="BackgroundColor" Value="{StaticResource Primary3}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="5, 0, 5, 0"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="IBMPlex" />
+        </Style>
+    </ContentPage.Resources>
 </ContentPage>
