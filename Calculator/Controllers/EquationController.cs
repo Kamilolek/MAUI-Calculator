@@ -230,6 +230,7 @@ namespace Calculator.Controllers
                 _equation.MainDisplay = _equation.Result.ToString();
                 _historyController.AddToHistory(_equation);
                 _lastResult = _equation.Result;
+                _equation.IsResult = true;
             }
             catch (Exception e)
             {

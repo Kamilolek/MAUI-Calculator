@@ -13,7 +13,7 @@ namespace Calculator.Models.ViewModels
         public string Title => AppInfo.Name;
         public string Developer => "Kamil Augustak";
         public string GitHubURL => "https://github.com/Kamilolek";
-        public string ProjectRepo => "https://github.com/Kamilolek/Calculator";
+        public string ProjectRepo => "https://github.com/Kamilolek/MAUI-Calculator";
 
     }
 }

@@ -48,7 +48,14 @@ public partial class CalculatorPage : ContentPage
     private void UpdateDisplay()
     {
         Equation equation = _equationController.GetEquation();
-        MainDisplay.Text = Regex.Replace(equation.MainDisplay, @"(\d)(?=(\d{3})+$)", "$1,");
+        if (equation.IsResult)
+        {
+            MainDisplay.Text = equation.MainDisplay;
+        }
+        else
+        {
+            MainDisplay.Text = Regex.Replace(equation.MainDisplay, @"(\d)(?=(\d{3})+$)", "$1,");
+        }
         UpperDisplay.Text = equation.UpperDisplay;
         Entry.Focus();
     }
